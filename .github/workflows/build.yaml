@@ -16,6 +16,10 @@ jobs:
         with:
           repository: ogdf/ogdf
           path: ogdf
+      - uses: actions/checkout@v4
+        with:
+          repository: reymond-group/tmap
+          path: tmap
 
       - name: setup msys2
         uses: msys2/setup-msys2@v2
@@ -30,14 +34,14 @@ jobs:
             zip
 
 
-      - name: build ogdf
+      - name: build ogdf (-NIX)
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
           cd ogdf
           cmake -DBUILD_SHARED_LIBS=ON .
           make
 
-      - name: build ogdf
+      - name: build ogdf (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         shell: msys2 {0}
         run: |
@@ -45,7 +49,16 @@ jobs:
           cmake -DBUILD_SHARED_LIBS=ON -G "MSYS Makefiles" .
           make
 
-      - name: build test
+      - name: build tmap (-NIX)
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
+        run: |
+          cd tmap
+          ln -s ../ogdf ../ogdf/lib # lib-directory hardcoded in tmap CMakeLists
+          LIBOGDF_INSTALL_PATH="../ogdf" cmake -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out .
+          make
+          mv out/_tmap*.so out/libtmap.so # TODO: hacky, tmap lib bekommt sonst so komischen Namen und laesst sich nicht linken
+
+      - name: build test (-NIX)
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
           mkdir build
@@ -53,7 +66,7 @@ jobs:
           cmake  ..
           make
 
-      - name: build test
+      - name: build test (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         shell: msys2 {0}
         run: |
@@ -66,4 +79,4 @@ jobs:
         run: |
           cd build
           ./ogdf_test
-          # ldd libogdf_based_lib.so
+          ldd libogdf_based_lib.so ||:
