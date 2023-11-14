@@ -15,19 +15,54 @@ jobs:
         with:
           repository: ogdf/ogdf
           path: ogdf
+
+      - name: setup msys2
+        uses: msys2/setup-msys2@v2
+        if: ${{ matrix.os == 'windows-latest' }}
+        with:
+          update: true
+          install: >-
+            base-devel
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            git
+            zip
+
+
       - name: build ogdf
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
           cd ogdf
           cmake -DBUILD_SHARED_LIBS=ON .
           make
+
+      - name: build ogdf
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: msys2 {0}
+        run: |
+          cd ogdf
+          cmake -DBUILD_SHARED_LIBS=ON -G "MSYS Makefiles" .
+          make
+
       - name: build test
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
           mkdir build
           cd build
-          cmake ..
+          cmake  ..
           make
+
+      - name: build test
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: msys2 {0}
+        run: |
+          mkdir build
+          cd build
+          cmake -G "MSYS Makefiles" ..
+          make
+
       - name: test
         run: |
           cd build
           ./ogdf_test
-          ldd libogdf_based_lib.so
+          # ldd libogdf_based_lib.so
