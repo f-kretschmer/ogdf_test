@@ -1,0 +1,26 @@
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build ogdf
+        run: |
+          cd ogdf
+          cmake -DBUILD_SHARED_LIBS=ON .
+          make
+      - name: build test
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+      - name: test
+        run: |
+          cd build
+          ./ogdf_test
+          ldd libogdf_based_lib.so
