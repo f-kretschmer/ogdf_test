@@ -49,6 +49,10 @@ jobs:
           cmake -DBUILD_SHARED_LIBS=ON -G "MSYS Makefiles" .
           make
 
+      - name: macos dependency
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: brew install --build-from-source libomp
+
       - name: build tmap (-NIX)
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
