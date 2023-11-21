@@ -46,7 +46,7 @@ jobs:
         shell: msys2 {0}
         run: |
           cd ogdf
-          cmake -DBUILD_SHARED_LIBS=ON -G "MSYS Makefiles" .
+          cmake -DBUILD_SHARED_LIBS=ON .
           make
 
       - name: build tmap (linux)
