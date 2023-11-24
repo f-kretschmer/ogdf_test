@@ -11,6 +11,15 @@ int main() {
 	float weights[5] = { 0.5, 1.0, 0.5, 1.0, 1.2 };
 
 
-	LayoutFromEdgeList_internals(4, &sources, &destinations, &weights, 5);
+	float res[4][5] = LayoutFromEdgeList_internals(4, &sources, &destinations, &weights, 5);
+	
+	for (auto& row : res)
+	{
+		for (auto& column : row)
+		{
+			std::cout << column << " ";
+		}
+		cout << endl;
+	}
 	return 0;
 }
