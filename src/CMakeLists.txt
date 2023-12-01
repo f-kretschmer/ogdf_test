@@ -6,8 +6,7 @@ if (WINDOWS)
   set(CLPModel_HEADER "de_unijena_bioinf_TreeVisualization_TreeVisualizer.h")
 endif()
 
-find_package(JNI REQUIRED)
-include_directories(${JNI_INCLUDE_DIRS})
+
 set(HEADER "de_unijena_bioinf_TreeVisualization_TreeVisualizer.h")
 add_library(OGDF_JNI_Wrapper SHARED LayoutFromEdgeList_internal.cpp ${HEADER})
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../ogdf")
@@ -17,14 +16,10 @@ if (STATIC_STD)
   message("STATIC_STD set: ${EXTRA_STATIC_LINKS}")
 endif()
 
-find_package("../ogdf")
-find_package("../tmap")
-
 
 target_include_directories(OGDF_JNI_Wrapper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(OGDF_JNI_Wrapper PUBLIC "../tmap/src/_tmap/")
+target_include_directories(OGDF_JNI_Wrapper PUBLIC "../tmap")
 target_include_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf")
-target_include_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf/include")
 
 
 if (STATIC_STD)
@@ -37,9 +32,8 @@ target_link_libraries(OGDF_JNI_Wrapper PUBLIC ${EXTRA_STATIC_LINKS})
 add_executable(OGDF_JNI_Wrapper LayoutFromEdgeList_internal.cpp)
 #link dependencies
 target_link_directories(OGDF_JNI_Wrapper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_directories(OGDF_JNI_Wrapper PUBLIC "../tmap/src/_tmap/")
+target_link_directories(OGDF_JNI_Wrapper PUBLIC "../tmap")
 target_link_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf")
-target_link_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf/include")
 
 #add executeable
 
