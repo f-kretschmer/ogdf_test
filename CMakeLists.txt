@@ -17,6 +17,8 @@ set(SRC_DIR "src")
 # TEST
 set(TEST_DIR "tests/cpp_test")
 
+find_package("src")
+
 add_library(ogdf_based_lib SHARED ogdf_based_lib.cpp ogdf_based_lib.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
 target_include_directories(ogdf_based_lib PUBLIC ${OGDF_DIR})
 target_include_directories(ogdf_based_lib PUBLIC ${TMAP_DIR})
