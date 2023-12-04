@@ -23,6 +23,14 @@ target_include_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf")
 target_include_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf/basic")
 target_include_directories(OGDF_JNI_Wrapper PUBLIC "..")
 
+add_subdirectory("../src")
+add_subdirectory("..")
+add_subdirectory("../tmap")
+add_subdirectory("../ogdf")
+add_subdirectory("../ogdf/basic")
+
+
+
 
 
 if (STATIC_STD)
