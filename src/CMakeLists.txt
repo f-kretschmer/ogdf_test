@@ -20,6 +20,9 @@ endif()
 target_include_directories(OGDF_JNI_Wrapper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(OGDF_JNI_Wrapper PUBLIC "../tmap")
 target_include_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf")
+target_include_directories(OGDF_JNI_Wrapper PUBLIC "../ogdf/basic")
+target_include_directories(OGDF_JNI_Wrapper PUBLIC "..")
+
 
 
 if (STATIC_STD)
