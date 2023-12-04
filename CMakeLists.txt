@@ -18,16 +18,15 @@ set(SRC_DIR "src")
 set(TEST_DIR "tests/cpp_test")
 
 add_library(ogdf_based_lib SHARED ogdf_based_lib.cpp ogdf_based_lib.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
-target_include_directories(ogdf_based_lib PUBLIC ${OGDF_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ogdf_based_lib PUBLIC ${OGDF_DIR})
 target_include_directories(ogdf_based_lib PUBLIC ${TMAP_DIR})
 target_include_directories(ogdf_based_lib PUBLIC ${SRC_DIR})
 target_include_directories(ogdf_based_lib PUBLIC ${TEST_DIR})
-
-target_include_directories(ogdf_based_lib PUBLIC "ogdf/basic")
+target_include_directories(ogdf_based_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package("../src")
 
-target_link_libraries(ogdf_based_lib PRIVATE ${OGDF_DIR} ${TMAP_DIR} ${SRC_DIR} ${TEST_DIR}) # wrapper mit OGDF + TMAP linken
+target_link_libraries(ogdf_based_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${OGDF_DIR} ${TMAP_DIR} ${SRC_DIR} ${TEST_DIR}) # wrapper mit OGDF + TMAP linken
 
 add_executable(ogdf_test ogdf_test.cpp) # test ob's auch funktioniert
 target_link_libraries(ogdf_test PRIVATE ogdf_based_lib) # test linken
