@@ -23,6 +23,8 @@ target_include_directories(ogdf_based_lib PUBLIC ${TMAP_DIR})
 target_include_directories(ogdf_based_lib PUBLIC ${SRC_DIR})
 target_include_directories(ogdf_based_lib PUBLIC ${TEST_DIR})
 
+target_include_directories(ogdf_based_lib PUBLIC "ogdf/basic")
+
 find_package("../src")
 
 target_link_libraries(ogdf_based_lib PRIVATE ${OGDF_DIR} ${TMAP_DIR} ${SRC_DIR} ${TEST_DIR}) # wrapper mit OGDF + TMAP linken
