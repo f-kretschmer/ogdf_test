@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(ogdf-user-example CXX)
+project(ogdf_based_lib CXX)
 
 # OGDF
 set(OGDF_DIR "ogdf")
