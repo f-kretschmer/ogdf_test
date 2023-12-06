@@ -65,7 +65,9 @@ jobs:
           brew install llvm
           cd tmap
           ln -s ../ogdf ../ogdf/lib # lib-directory hardcoded in tmap CMakeLists
-          LIBOGDF_INSTALL_PATH="../ogdf" cmake -fopenmp=libomp -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include" -DOpenMP_CXX_LIB_NAMES="omp" -DOpenMP_omp_LIBRARY=/usr/local/opt/libomp/lib/libomp.dylib .
+          export LDFLAGS="-L/usr/local/opt/llvm/lib"
+          export CPPFLAGS="-I/usr/local/opt/llvm/include"
+          LIBOGDF_INSTALL_PATH="../ogdf" cmake -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include" -DOpenMP_CXX_LIB_NAMES="omp" -DOpenMP_omp_LIBRARY=/usr/local/opt/libomp/lib/libomp.dylib .
           make 
           mv out/_tmap*.so out/libtmap.so # TODO: hacky, tmap lib bekommt sonst so komischen Namen und laesst sich nicht linken
 
