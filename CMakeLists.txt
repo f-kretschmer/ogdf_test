@@ -24,5 +24,5 @@ target_include_directories(ogdf_based_lib PRIVATE "tmap/src/_tmap")
 # target_link_directories(ogdf_based_lib PRIVATE "tmap/out")
 target_link_libraries(ogdf_based_lib PRIVATE OGDF ${TMAP} ${Python_LIBRARIES}) # wrapper mit OGDF + TMAP linken
 
-add_executable(ogdf_test ogdf_test.cpp) # test ob's auch funktioniert
+add_executable(ogdf_test LayoutFromEdgeList_internal.cpp) # test ob's auch funktioniert
 target_link_libraries(ogdf_test PRIVATE ogdf_based_lib) # test linken
