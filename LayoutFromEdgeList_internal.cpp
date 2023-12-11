@@ -69,14 +69,14 @@ JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisu
 float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* destinations, float* weights, int number_of_edges) {
 
     // Create a vector of tuples
-    const std::vector<std::tuple<uint32_t, uint32_t, float>> edges;
+    std::vector<std::tuple<uint32_t, uint32_t, float>> edges;
     
     // Populate the vector with tuples
     for (int i = 0; i < number_of_nodes; ++i) {
         edges.push_back(std::make_tuple(static_cast<uint32_t>(sources[i]), static_cast<uint32_t>(destinations[i]), weights[i]));
     }
-    std::tuple<std::vector<float>, std::vector<float>, std::vector<uint32_t>,
-        std::vector<uint32_t>, tmap::GraphProperties> returned = tmap::LayoutFromEdgeList(number_of_nodes, &edges);
+    std::tuple<std::vector<float>, std::vector<float>, std::vector<uint32_t>, std::vector<uint32_t>, tmap::GraphProperties> returned = tmap::LayoutFromEdgeList(number_of_nodes, edges);
+
 
     // Extract the vectors from the tuple
     std::vector<float>& vector1 = std::get<0>(returned);
