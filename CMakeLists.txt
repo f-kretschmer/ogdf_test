@@ -15,6 +15,8 @@ include_directories(${JNI_INCLUDE_DIRS})
 
 # TMAP
 find_library(TMAP NAMES "tmap" PATHS "tmap/out/" REQUIRED)
+find_library(TMAP2 NAMES "tmap" PATHS "tmap/src/_tmap" REQUIRED)
+
 find_package(Python COMPONENTS Development) # TODO: warum brauche ich hier Python? Muss irgendwie weg
 
 add_library(ogdf_based_lib SHARED LayoutFromEdgeList_internal.cpp de_unijena_bioinf_TreeVisualization_TreeVisualizer.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
@@ -22,7 +24,7 @@ add_library(ogdf_based_lib SHARED LayoutFromEdgeList_internal.cpp de_unijena_bio
 target_include_directories(ogdf_based_lib PRIVATE ${OGDF_INCLUDE_DIRS})
 target_include_directories(ogdf_based_lib PRIVATE "tmap/src/_tmap")
 # target_link_directories(ogdf_based_lib PRIVATE "tmap/out")
-target_link_libraries(ogdf_based_lib PRIVATE OGDF ${TMAP} ${Python_LIBRARIES}) # wrapper mit OGDF + TMAP linken
+target_link_libraries(ogdf_based_lib PRIVATE OGDF ${TMAP} ${TMAP2} ${Python_LIBRARIES}) # wrapper mit OGDF + TMAP linken
 
 add_executable(ogdf_test LayoutFromEdgeList_internal.cpp) # test ob's auch funktioniert
 target_link_libraries(ogdf_test PRIVATE ogdf_based_lib) # test linken
