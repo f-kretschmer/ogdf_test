@@ -95,5 +95,5 @@ jobs:
           ldd libogdf_based_lib.so ||:
     
       - name: Debug with tmate on failure
-        if: ${{ failure() }}
+        if: ${{ failure() && matrix.os == 'ubuntu-latest'}}
         uses: mxschmitt/action-tmate@v3
