@@ -17,7 +17,7 @@ include_directories(${JNI_INCLUDE_DIRS})
 find_library(TMAP NAMES "tmap" PATHS "tmap/out/" REQUIRED)
 find_package(Python COMPONENTS Development) # TODO: warum brauche ich hier Python? Muss irgendwie weg
 
-add_library(ogdf_based_lib SHARED ogdf_based_lib.cpp ogdf_based_lib.h LayoutFromEdgeList_internal.cpp de_unijena_bioinf_TreeVisualization_TreeVisualizer.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
+add_library(ogdf_based_lib SHARED LayoutFromEdgeList_internal.cpp de_unijena_bioinf_TreeVisualization_TreeVisualizer.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
 
 target_include_directories(ogdf_based_lib PRIVATE ${OGDF_INCLUDE_DIRS})
 target_include_directories(ogdf_based_lib PRIVATE "tmap/src/_tmap")
