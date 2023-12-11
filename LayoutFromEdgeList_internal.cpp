@@ -69,7 +69,7 @@ JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisu
 float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* destinations, float* weights, int number_of_edges) {
 
     // Create a vector of tuples
-    std::vector<std::tuple<uint32_t, uint32_t, float>> edges;
+    const std::vector<std::tuple<uint32_t, uint32_t, float>> edges;
     
     // Populate the vector with tuples
     for (int i = 0; i < number_of_nodes; ++i) {
