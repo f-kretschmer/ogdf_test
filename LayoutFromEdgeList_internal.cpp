@@ -68,6 +68,10 @@ JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisu
 
 float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* destinations, float* weights, int number_of_edges) {
 
+    // Try Find GraphProperties
+    auto gp = tmap::GraphProperties();
+    std::cout << gp.mst_weight << std::endl;
+
     // Create a vector of tuples
     std::vector<std::tuple<uint32_t, uint32_t, float>> edges;
     
