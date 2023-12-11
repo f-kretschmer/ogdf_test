@@ -93,3 +93,7 @@ jobs:
           cd build
           ./ogdf_test
           ldd libogdf_based_lib.so ||:
+    
+      - name: Debug with tmate on failure
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
