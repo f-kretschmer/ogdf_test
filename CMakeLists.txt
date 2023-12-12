@@ -21,6 +21,8 @@ find_package(Python COMPONENTS Development) # TODO: warum brauche ich hier Pytho
 add_library(ogdf_based_lib SHARED LayoutFromEdgeList_internal.cpp de_unijena_bioinf_TreeVisualization_TreeVisualizer.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
 
 target_include_directories(ogdf_based_lib PRIVATE ${OGDF_INCLUDE_DIRS})
+target_include_directories(ogdf_based_lib PRIVATE "tmap/src/_tmap")
+
 target_link_libraries(ogdf_based_lib PRIVATE OGDF ${TMAP} ${Python_LIBRARIES}) # wrapper mit OGDF + TMAP linken
 
 add_executable(ogdf_test LayoutFromEdgeList_internal.cpp) # test ob's auch funktioniert
