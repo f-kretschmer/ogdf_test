@@ -1,0 +1,26 @@
+#+NAME: Wrapper library for TMAP and OGDF
+* Dependencies
+
+TMAP (+OGDF) are compiled from a [[https://github.com/f-kretschmer/tmap][tmap-fork]] using GitHub workflows
+- [[https://github.com/f-kretschmer/tmap/blob/master/CMakeLists.txt][TMAP CMakeLists]] has to be modified because the original one only builds a Python-bindings
+  library which we can not use (does not expose the function(s) we need)
+- compiled binaries are available there as [[https://github.com/f-kretschmer/tmap/releases][Releases]]
+
+* Building
+
+Everything happens in [[https://github.com/f-kretschmer/ogdf_test/blob/master/.github/workflows/build.yaml][the "build" GitHub workflow]]:
+- cloning the tmap-fork-repo
+- downloading compiled binaries from the tmap-fork-releases
+- =cmake= has to be run again for OGDF because one of the needed header files is auto-generated
+  - [ ] might be fixable by adding this file to the binaries (probably OS-specific)
+- building, testing
+- creating a release containing both the dependency-binaries as well as the newly-compiled wrapper-binaries
+
+* New Java Foreign Function API
+
+- Only real documentation here: https://openjdk.org/jeps/442
+- available for Java 21 (LTS-version), but as preview:
+  - [[https://stackoverflow.com/a/76508846][how to enable for IntelliJ]]
+- [[https://github.com/openjdk/jextract][jextract]] might be useful here by creating code from C++ header files automatically
+  - no luck in trying to get it to work yet, though
+- [[https://github.com/f-kretschmer/ogdf_test/blob/master/tests/java_test/ForeignAPI.java][Java test file]]
