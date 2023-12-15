@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(ogdf-user-example CXX)
 
+set(CMAKE_CXX_FLAGS "-fpermissive -fPIC") # DEBUG, remove later
+
 # OGDF
 set(OGDF_DIR "ogdf")
 find_package(OGDF REQUIRED CONFIG)
@@ -16,14 +18,24 @@ include_directories(${JNI_INCLUDE_DIRS})
 # TMAP
 find_library(TMAP NAMES "tmap" PATHS "tmap/out/" REQUIRED)
 
-find_package(Python COMPONENTS Development) # TODO: warum brauche ich hier Python? Muss irgendwie weg
+message("${TMAP}")
 
-add_library(ogdf_based_lib SHARED LayoutFromEdgeList_internal.cpp de_unijena_bioinf_TreeVisualization_TreeVisualizer.h) # Das ist das wichtige hier (SHARED!), waere der OGDF_JNI_WRAPPER
+# find_package(Python COMPONENTS Development) # TODO: warum brauche ich hier Python? Muss irgendwie weg
 
-target_include_directories(ogdf_based_lib PRIVATE ${OGDF_INCLUDE_DIRS})
-target_include_directories(ogdf_based_lib PRIVATE "tmap/src/_tmap")
 
-target_link_libraries(ogdf_based_lib PRIVATE OGDF ${TMAP} ${Python_LIBRARIES}) # wrapper mit OGDF + TMAP linken
+add_library(LayoutFromEdgeList_internal SHARED LayoutFromEdgeList_internal.cpp LayoutFromEdgeList_internal.hpp)
+add_library(LayoutFromEdgeList_internal_JNI SHARED LayoutFromEdgeList_internal_JNI.cpp)
 
-add_executable(ogdf_test LayoutFromEdgeList_internal.cpp) # test ob's auch funktioniert
-target_link_libraries(ogdf_test PRIVATE ogdf_based_lib) # test linken
+target_include_directories(LayoutFromEdgeList_internal PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(LayoutFromEdgeList_internal_JNI PUBLIC ${JNI_INCLUDE_DIRS})
+
+target_include_directories(LayoutFromEdgeList_internal PUBLIC ${OGDF_INCLUDE_DIRS})
+target_include_directories(LayoutFromEdgeList_internal PUBLIC "tmap/src/_tmap")
+
+target_link_libraries(LayoutFromEdgeList_internal PUBLIC OGDF ${TMAP}) # wrapper mit OGDF + TMAP linken
+target_link_libraries(LayoutFromEdgeList_internal_JNI PRIVATE LayoutFromEdgeList_internal)
+
+
+add_executable(LayoutFromEdgeList_test test_cpp-endpoint.cpp)
+# target_include_directories(LayoutFromEdgeList_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(LayoutFromEdgeList_test PRIVATE LayoutFromEdgeList_internal) # test linken
