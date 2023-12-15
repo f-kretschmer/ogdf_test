@@ -16,10 +16,10 @@ jobs:
         with:
           repository: ogdf/ogdf
           path: ogdf
-      - uses: actions/checkout@v4
-        with:
-          repository: reymond-group/tmap
-          path: tmap
+      # - uses: actions/checkout@v4
+      #   with:
+      #     repository: reymond-group/tmap
+      #     path: tmap
 
       - name: setup msys2
         uses: msys2/setup-msys2@v2
@@ -68,7 +68,7 @@ jobs:
           export LDFLAGS="-L/usr/local/opt/llvm/lib"
           export CPPFLAGS="-I/usr/local/opt/llvm/include"
           LIBOGDF_INSTALL_PATH="../ogdf" cmake -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include" -DOpenMP_CXX_LIB_NAMES="omp" -DOpenMP_omp_LIBRARY=/usr/local/opt/libomp/lib/libomp.dylib .
-          make 
+          make
           mv out/_tmap*.so out/libtmap.so # TODO: hacky, tmap lib bekommt sonst so komischen Namen und laesst sich nicht linken
 
       - name: build test (-NIX)
@@ -93,7 +93,7 @@ jobs:
           cd build
           ./ogdf_test
           ldd libogdf_based_lib.so ||:
-    
+
       - name: Debug with tmate on failure
         if: ${{ failure() && matrix.os == 'ubuntu-latest'}}
         uses: mxschmitt/action-tmate@v3
