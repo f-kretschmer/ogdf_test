@@ -1,0 +1,82 @@
+\hypertarget{bindings_8cc}{}\section{tmap/bindings.cc File Reference}
+\label{bindings_8cc}\index{tmap/bindings.\+cc@{tmap/bindings.\+cc}}
+
+
+Pybind11 bindings for tmap.  
+
+
+{\ttfamily \#include \char`\"{}layout.\+hh\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}lshforest.\+hh\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}minhash.\+hh\char`\"{}}\newline
+{\ttfamily \#include $<$pybind11/pybind11.\+h$>$}\newline
+{\ttfamily \#include $<$pybind11/stl.\+h$>$}\newline
+{\ttfamily \#include $<$pybind11/stl\+\_\+bind.\+h$>$}\newline
+{\ttfamily \#include $<$pybind11/numpy.\+h$>$}\newline
+Include dependency graph for bindings.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{bindings_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classPyMinhash}{Py\+Minhash}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bindings_8cc_aa35cb02b50ba480c64efbb4bc86032ac}\label{bindings_8cc_aa35cb02b50ba480c64efbb4bc86032ac}} 
+{\footnotesize template$<$class T $>$ }\\std\+::vector$<$ T $>$ {\bfseries convert\+\_\+list} (py\+::list \&l)
+\item 
+\mbox{\Hypertarget{bindings_8cc_aa4a4a91ef3efb196f029c025de4a6f69}\label{bindings_8cc_aa4a4a91ef3efb196f029c025de4a6f69}} 
+{\footnotesize template$<$class T $>$ }\\std\+::vector$<$ std\+::vector$<$ T $>$ $>$ {\bfseries convert\+\_\+list\+\_\+of\+\_\+lists} (py\+::list \&l)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a1ba98f6b35774cb8b8ce378bca840013}\label{bindings_8cc_a1ba98f6b35774cb8b8ce378bca840013}} 
+{\footnotesize template$<$class T $>$ }\\std\+::vector$<$ std\+::vector$<$ T $>$ $>$ {\bfseries convert\+\_\+array} (py\+::array\+\_\+t$<$ T $>$ arr)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a520b6bfa4ff9476676e154992ae11a95}\label{bindings_8cc_a520b6bfa4ff9476676e154992ae11a95}} 
+{\footnotesize template$<$class T $>$ }\\std\+::vector$<$ std\+::vector$<$ float $>$ $>$ {\bfseries convert\+\_\+array\+\_\+to\+\_\+float} (py\+::array\+\_\+t$<$ T $>$ arr)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a8cc96963394e1bf2d1f2c8c298a8961f}\label{bindings_8cc_a8cc96963394e1bf2d1f2c8c298a8961f}} 
+{\bfseries P\+Y\+B\+I\+N\+D11\+\_\+\+M\+A\+K\+E\+\_\+\+O\+P\+A\+Q\+UE} (std\+::vector$<$ uint8\+\_\+t $>$)
+\item 
+\mbox{\Hypertarget{bindings_8cc_adf1d3c96cae502b5022e395df7c8f792}\label{bindings_8cc_adf1d3c96cae502b5022e395df7c8f792}} 
+{\bfseries P\+Y\+B\+I\+N\+D11\+\_\+\+M\+A\+K\+E\+\_\+\+O\+P\+A\+Q\+UE} (std\+::vector$<$ uint16\+\_\+t $>$)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a27eff19ba73a3e99fe1f7951db3a05a9}\label{bindings_8cc_a27eff19ba73a3e99fe1f7951db3a05a9}} 
+{\bfseries P\+Y\+B\+I\+N\+D11\+\_\+\+M\+A\+K\+E\+\_\+\+O\+P\+A\+Q\+UE} (std\+::vector$<$ uint32\+\_\+t $>$)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a0ac4737d613502a5272d1c7c55c75000}\label{bindings_8cc_a0ac4737d613502a5272d1c7c55c75000}} 
+{\bfseries P\+Y\+B\+I\+N\+D11\+\_\+\+M\+A\+K\+E\+\_\+\+O\+P\+A\+Q\+UE} (std\+::vector$<$ uint64\+\_\+t $>$)
+\item 
+\mbox{\Hypertarget{bindings_8cc_adc31052ce19269023b82cb33511fbc37}\label{bindings_8cc_adc31052ce19269023b82cb33511fbc37}} 
+{\bfseries P\+Y\+B\+I\+N\+D11\+\_\+\+M\+A\+K\+E\+\_\+\+O\+P\+A\+Q\+UE} (std\+::vector$<$ float $>$)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a5f4ea1a5f55756d0cb9d5b31695f4d17}\label{bindings_8cc_a5f4ea1a5f55756d0cb9d5b31695f4d17}} 
+py\+::tuple {\bfseries Layout\+From\+L\+S\+H\+Forest\+Native} (\hyperlink{classtmap_1_1LSHForest}{L\+S\+H\+Forest} \&lsh\+\_\+forest, \hyperlink{structtmap_1_1LayoutConfiguration}{Layout\+Configuration} config=\hyperlink{structtmap_1_1LayoutConfiguration}{Layout\+Configuration}(), bool create\+\_\+mst=true, bool clear\+\_\+lsh\+\_\+forest=false)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a7f0be4f32b6644866d034184943e77cd}\label{bindings_8cc_a7f0be4f32b6644866d034184943e77cd}} 
+py\+::tuple {\bfseries Layout\+From\+Edge\+List\+Native} (uint32\+\_\+t vertex\+\_\+count, const std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t, float $>$$>$ \&edges, \hyperlink{structtmap_1_1LayoutConfiguration}{Layout\+Configuration} config=\hyperlink{structtmap_1_1LayoutConfiguration}{Layout\+Configuration}(), bool create\+\_\+mst=true)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a62a50449e3bb33a83f118e7c56237056}\label{bindings_8cc_a62a50449e3bb33a83f118e7c56237056}} 
+py\+::tuple {\bfseries Make\+Edge\+List\+Native} (std\+::vector$<$ float $>$ x, std\+::vector$<$ float $>$ y, std\+::vector$<$ uint32\+\_\+t $>$ s, std\+::vector$<$ uint32\+\_\+t $>$ t)
+\item 
+\mbox{\Hypertarget{bindings_8cc_a4274a51ba9942c31b5553c1678c70e1c}\label{bindings_8cc_a4274a51ba9942c31b5553c1678c70e1c}} 
+{\bfseries P\+Y\+B\+I\+N\+D11\+\_\+\+M\+O\+D\+U\+LE} (tmap, m)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Pybind11 bindings for tmap. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Probst (\href{mailto:daenuprobst@gmail.com}{\tt daenuprobst@gmail.\+com}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2019-\/06-\/17 
+\end{DoxyDate}
