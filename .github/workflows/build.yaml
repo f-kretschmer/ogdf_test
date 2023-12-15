@@ -10,16 +10,18 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: ogdf/ogdf
-          path: ogdf
       # - uses: actions/checkout@v4
       #   with:
-      #     repository: reymond-group/tmap
-      #     path: tmap
+      #     repository: ogdf/ogdf
+      #     path: ogdf
+      - uses: actions/checkout@v4
+        with:
+          repository: f-kretschmer/tmap
+          path: tmap
 
       - name: setup msys2
         uses: msys2/setup-msys2@v2
@@ -33,44 +35,40 @@ jobs:
             git
             zip
 
-
-      - name: build ogdf (-NIX)
+      - name: get OGDF + TMAP binaries
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
-          cd ogdf
-          cmake -DBUILD_SHARED_LIBS=ON .
-          make
+            wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            unzip -j binaries-${{ runner.os }}.zip -d binaries
+            mkdir tmap/out
+            mv binaries/*tmap* tmap/out/ # TMAP library
+            mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
 
-      - name: build ogdf (Windows)
+      - name: get OGDF + TMAP binaries (windows)
         if: ${{ matrix.os == 'windows-latest' }}
         shell: msys2 {0}
         run: |
-          cd ogdf
+            wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            unzip -j binaries-${{ runner.os }}.zip -d binaries
+            mkdir tmap/out
+            mv binaries/*tmap* tmap/out/ # TMAP library
+            mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
+
+
+      - name: create missing OGDF header file by running cmake
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
+        run: |
+          cd tmap/ogdf-conda/src
           cmake -DBUILD_SHARED_LIBS=ON .
-          make
 
-      - name: build tmap (linux)
-        if: ${{ matrix.os == 'ubuntu-latest'}}
+      - name: create missing OGDF header file by running cmake (windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: msys2 {0}
         run: |
-          cd tmap
-          ln -s ../ogdf ../ogdf/lib # lib-directory hardcoded in tmap CMakeLists
-          LIBOGDF_INSTALL_PATH="../ogdf" cmake -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out .
-          make
+          cd tmap/ogdf-conda/src
+          cmake -DBUILD_SHARED_LIBS=ON -G "Visual Studio 17 2022" -A x64 -T ClangCL .
 
-
-      - name: build tmap (mac)
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: |
-          brew install llvm
-          cd tmap
-          ln -s ../ogdf ../ogdf/lib # lib-directory hardcoded in tmap CMakeLists
-          export LDFLAGS="-L/usr/local/opt/llvm/lib"
-          export CPPFLAGS="-I/usr/local/opt/llvm/include"
-          LIBOGDF_INSTALL_PATH="../ogdf" cmake -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out -DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include" -DOpenMP_CXX_LIB_NAMES="omp" -DOpenMP_omp_LIBRARY=/usr/local/opt/libomp/lib/libomp.dylib .
-          make
-          mv out/_tmap*.so out/libtmap.so # TODO: hacky, tmap lib bekommt sonst so komischen Namen und laesst sich nicht linken
-
-      - name: build test (-NIX)
+      - name: build test
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
           mkdir build
@@ -78,7 +76,7 @@ jobs:
           cmake  ..
           make
 
-      - name: build test (Windows)
+      - name: build test (windows)
         if: ${{ matrix.os == 'windows-latest' }}
         shell: msys2 {0}
         run: |
@@ -91,8 +89,25 @@ jobs:
         run: |
           cd build
           ./ogdf_test
-          ldd libogdf_based_lib.so ||:
+          ldd *.so ||:
+          ldd *.dylib ||:
+
+      - name: make zip of binaries
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
+        run: |
+          zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
+
+      - name: make zip of binaries
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: msys2 {0}
+        run: |
+          zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
+
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: "*.zip"
+          tag_name: "0.1"
 
       - name: Debug with tmate on failure
-        if: ${{ failure() && matrix.os == 'ubuntu-latest'}}
+        if: ${{ failure()}}
         uses: mxschmitt/action-tmate@v3

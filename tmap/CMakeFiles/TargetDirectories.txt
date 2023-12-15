@@ -1,3 +1,0 @@
-/home/fleming/Documents/Projects/ogdf_test/tmap/CMakeFiles/tmap.dir
-/home/fleming/Documents/Projects/ogdf_test/tmap/CMakeFiles/edit_cache.dir
-/home/fleming/Documents/Projects/ogdf_test/tmap/CMakeFiles/rebuild_cache.dir

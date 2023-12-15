@@ -65,8 +65,3 @@ float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* de
     }
     return result;
 }
-
-void testMinHash(){
-  auto gp = tmap::GraphProperties();
-  std::cout << gp.mst_weight << std::endl;
-}
