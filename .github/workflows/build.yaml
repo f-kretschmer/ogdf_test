@@ -88,7 +88,7 @@ jobs:
       - name: test
         run: |
           cd build
-          ./ogdf_test
+          LD_LIBRARY_PATH=../tmap/ogdf-conda/src ./LayoutFromEdgeList_test
           ldd *.so ||:
           ldd *.dylib ||:
 
