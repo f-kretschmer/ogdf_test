@@ -56,7 +56,6 @@ jobs:
           ln -s ../ogdf ../ogdf/lib # lib-directory hardcoded in tmap CMakeLists
           LIBOGDF_INSTALL_PATH="../ogdf" cmake -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=out .
           make
-          mv out/_tmap*.so out/libtmap.so # TODO: hacky, tmap lib bekommt sonst so komischen Namen und laesst sich nicht linken
 
 
       - name: build tmap (mac)
