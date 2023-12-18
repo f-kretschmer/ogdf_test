@@ -7,7 +7,7 @@ int main() {
 	float * weights = new float[6] { 0.91, 0.19, 0.89, 0.64, 0.67, 0.01 };
 
 
-	auto res = LayoutFromEdgeList_internals(4, sources, destinations, weights, 6);
+	auto res = LayoutFromEdgeList_internals(5, sources, destinations, weights, 6);
 
 
 	// for (auto& row : res)

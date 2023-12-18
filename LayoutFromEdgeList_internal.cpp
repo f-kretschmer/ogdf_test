@@ -18,10 +18,13 @@ float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* de
     for (int i = 0; i < number_of_nodes; ++i) {
         edges.push_back(std::make_tuple(static_cast<uint32_t>(sources[i]), static_cast<uint32_t>(destinations[i]), weights[i]));
     }
+	// generate LayoutConfig
     tmap::LayoutConfiguration config  = tmap::LayoutConfiguration();
-    std::tuple<std::vector<float>, std::vector<float>, std::vector<uint32_t>, std::vector<uint32_t>, tmap::GraphProperties> returned = tmap::LayoutFromEdgeList(number_of_nodes, edges, config, false, true);
-
-
+	
+	// call function
+    //std::tuple<std::vector<float>, std::vector<float>, std::vector<uint32_t>, std::vector<uint32_t>, tmap::GraphProperties> returned = tmap::LayoutFromEdgeList(number_of_nodes, edges, config, false, true);
+	auto returned = tmap::LayoutFromEdgeList(number_of_nodes, edges, config, false, true);
+	return 0;
     // Extract the vectors from the tuple
     std::vector<float>& vector1 = std::get<0>(returned);
     std::vector<float>& vector2 = std::get<1>(returned);
