@@ -7,7 +7,7 @@ int main() {
 	float * weights = new float[5] { 0.5, 1.0, 0.5, 1.0, 1.2 };
 
 
-	auto res = LayoutFromEdgeList_internals(4, sources, destinations, weights, 5);
+	// auto res = LayoutFromEdgeList_internals(4, sources, destinations, weights, 5);
 
 
 	// for (auto& row : res)
@@ -19,7 +19,7 @@ int main() {
         //         std::cout << endl;
 	// }
 
-        std::cout << res << std::endl;
+        // std::cout << res << std::endl;
 
 	return 0;
 }
