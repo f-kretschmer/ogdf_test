@@ -45,7 +45,7 @@ jobs:
 
       - name: get OGDF + TMAP binaries (windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
+        shell: msys2 {0}
         run: |
             wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
             unzip -j binaries-${{ runner.os }}.zip -d binaries
