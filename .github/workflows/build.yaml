@@ -81,8 +81,8 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "MSYS Makefiles" ..
-          make
+          cmake -G "Visual Studio 17 2022" -A x64 -T ClangCL ..
+          cmake --build .
 
       - name: test
         run: |
