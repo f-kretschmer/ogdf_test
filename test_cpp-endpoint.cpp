@@ -2,12 +2,12 @@
 #include "LayoutFromEdgeList_internal.hpp"
 
 int main() {
-	int * sources = new int[5] { 1, 2, 3, 4, 1 };
-	int * destinations = new int[5] { 2, 3, 4, 1, 3 };
-	float * weights = new float[5] { 0.5, 1.0, 0.5, 1.0, 1.2 };
+	int * sources = new int[6] { 0, 0, 1, 3, 3, 4 };
+	int * destinations = new int[6] { 2, 4, 0, 0, 2, 3 };
+	float * weights = new float[6] { 0.91, 0.19, 0.89, 0.64, 0.67, 0.01 };
 
 
-	// auto res = LayoutFromEdgeList_internals(4, sources, destinations, weights, 5);
+	auto res = LayoutFromEdgeList_internals(4, sources, destinations, weights, 6);
 
 
 	// for (auto& row : res)
