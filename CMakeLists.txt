@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(ogdf-tmap-wrapper CXX)
+set (CMAKE_CXX_STANDARD 11)
 
 # JNI
 find_package(JNI REQUIRED)
