@@ -1,17 +1,23 @@
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.util.Arrays;
+import java.nio.file.Path;
 
 import static java.lang.foreign.ValueLayout.*;
 
 public class ForeignAPI {
 
+    private String odgfFileName = "libOGDF.so";
+    private String tmapFileName = "libtmap.so";
+
+
+
+
     // some general tests on how this interface works
     void testForeignGeneral() {
+        // check if paths are correct
+
         // This line creates a SymbolLookup object, which can be used to find native symbols on the C library path.
         SymbolLookup stdlib = Linker.nativeLinker().defaultLookup();
-
-
         // This line creates a MethodHandle object for the strlen() function. The MethodHandle object contains all
         // the information needed to call the native function, such as the function pointer and the function signature.
         MethodHandle strlen = Linker.nativeLinker().downcallHandle(
@@ -33,8 +39,8 @@ public class ForeignAPI {
             System.out.println("len = " + len);
 
             // load our native lib
-            SymbolLookup ogdf = SymbolLookup.libraryLookup("<path>/libOGDF.so", offHeap);
-            SymbolLookup tmap = SymbolLookup.libraryLookup("<path>/libtmap.so", offHeap);
+            SymbolLookup ogdf = SymbolLookup.libraryLookup(odgfFileName, offHeap);
+            SymbolLookup tmap = SymbolLookup.libraryLookup(tmapFileName, offHeap);
             // check whether our function is present
             // NOTE: have to use the mangled C++ symbols, which are shit for namespaces... (-> objdump -T x.so | grep y)
             // NOTE: could be alleviated by using "extern"; this requires mod. the source code which we don't want
@@ -46,7 +52,7 @@ public class ForeignAPI {
                     // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
                     FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
             MethodHandle binomial = Linker.nativeLinker().downcallHandle(
-                    ogdf.find("_ZN4ogdf4Math8binomialEii").orElseThrow(),
+                    //ogdf.find("_ZN4ogdf4Math8binomialEii").orElseThrow(),
                     // return, arg1, arg2, ...
                     FunctionDescriptor.of(JAVA_INT, JAVA_INT, JAVA_INT));
 
@@ -62,7 +68,7 @@ public class ForeignAPI {
         try (Arena offHeap = Arena.ofConfined()) {
 
             // load our native lib
-            SymbolLookup tmap = SymbolLookup.libraryLookup("<path>/libtmap.so", offHeap);
+            SymbolLookup tmap = SymbolLookup.libraryLookup(tmapFileName, offHeap);
 
             // get tmap::LayoutConfiguration
             // TODO:
@@ -81,7 +87,7 @@ public class ForeignAPI {
 
             // call
             // TODO:
-            tmapLayout.invoke()
+            tmapLayout.invoke();
 
 
         } catch (Throwable e) {
@@ -92,7 +98,8 @@ public class ForeignAPI {
 
 
     public static void main(String[] args) {
-
+        ForeignAPI api = new ForeignAPI();
+        api.testForeignGeneral();
     }
 
 
