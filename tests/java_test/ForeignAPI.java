@@ -1,13 +1,20 @@
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.nio.file.Path;
 
 import static java.lang.foreign.ValueLayout.*;
 
 public class ForeignAPI {
 
-    private String odgfFileName = "libOGDF.so";
-    private String tmapFileName = "libtmap.so";
+    private static class libNames {
+        public static final String odgfFileName = "libOGDF.so";
+        public static final String tmapFileName = "libtmap.so";
+    }
+
+    private static class FunctionNames {
+        public static final String ogdfBinomial = "_ZN4ogdf4Math8binomialEii";
+        public static final String tmapLayoutFromEdgeList = "_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb";
+    }
+
 
 
 
@@ -38,26 +45,30 @@ public class ForeignAPI {
             long len = (long) strlen.invoke(str);
             System.out.println("len = " + len);
 
+            // System.load("/home/user/IdeaProjects/ogdf_test/binaries/libOGDF.so");
+
+
             // load our native lib
-            SymbolLookup ogdf = SymbolLookup.libraryLookup(odgfFileName, offHeap);
-            SymbolLookup tmap = SymbolLookup.libraryLookup(tmapFileName, offHeap);
+            SymbolLookup ogdf = SymbolLookup.libraryLookup(libNames.odgfFileName, offHeap);
+            SymbolLookup tmap = SymbolLookup.libraryLookup(libNames.tmapFileName, offHeap);
             // check whether our function is present
             // NOTE: have to use the mangled C++ symbols, which are shit for namespaces... (-> objdump -T x.so | grep y)
             // NOTE: could be alleviated by using "extern"; this requires mod. the source code which we don't want
-            // System.out.println(ogdf.find("_ZN4ogdf4Math8binomialEii").isPresent());
-            System.out.println(tmap.find("_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb").isPresent());
+            System.out.println(ogdf.find(FunctionNames.ogdfBinomial).isPresent());
+            System.out.println(tmap.find(FunctionNames.tmapLayoutFromEdgeList).isPresent());
             // get handle for symbol
             MethodHandle tmapLayout = Linker.nativeLinker().downcallHandle(
-                    tmap.find("_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb").orElseThrow(),
+                    tmap.find(FunctionNames.tmapLayoutFromEdgeList).orElseThrow(),
                     // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
                     FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
             MethodHandle binomial = Linker.nativeLinker().downcallHandle(
-                    //ogdf.find("_ZN4ogdf4Math8binomialEii").orElseThrow(),
+                    ogdf.find(FunctionNames.ogdfBinomial).orElseThrow(),
                     // return, arg1, arg2, ...
                     FunctionDescriptor.of(JAVA_INT, JAVA_INT, JAVA_INT));
 
             // nice automatic casting for primitives...
-            System.out.println(binomial.invoke(10, 2));
+            Object result = binomial.invoke(10, 2);
+            System.out.println(result);
 
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -68,7 +79,7 @@ public class ForeignAPI {
         try (Arena offHeap = Arena.ofConfined()) {
 
             // load our native lib
-            SymbolLookup tmap = SymbolLookup.libraryLookup(tmapFileName, offHeap);
+            SymbolLookup tmap = SymbolLookup.libraryLookup(libNames.tmapFileName, offHeap);
 
             // get tmap::LayoutConfiguration
             // TODO:
@@ -81,7 +92,7 @@ public class ForeignAPI {
 
             // get handle for layout fun
             MethodHandle tmapLayout = Linker.nativeLinker().downcallHandle(
-                    tmap.find("_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb").orElseThrow(),
+                    tmap.find(FunctionNames.tmapLayoutFromEdgeList).orElseThrow(),
                     // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
                     FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
 
