@@ -13,6 +13,7 @@ public class ForeignAPI {
     private static class FunctionNames {
         public static final String ogdfBinomial = "_ZN4ogdf4Math8binomialEii";
         public static final String tmapLayoutFromEdgeList = "_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb";
+        public static final String tmapLayoutFromLSHForest = "_ZN4tmap19LayoutFromLSHForestERNS_9LSHForestENS_19LayoutConfigurationEbbb";
     }
 
 
