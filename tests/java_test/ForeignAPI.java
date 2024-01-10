@@ -14,6 +14,7 @@ public class ForeignAPI {
         public static final String ogdfBinomial = "_ZN4ogdf4Math8binomialEii";
         public static final String tmapLayoutFromEdgeList = "_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb";
         public static final String tmapLayoutFromLSHForest = "_ZN4tmap19LayoutFromLSHForestERNS_9LSHForestENS_19LayoutConfigurationEbbb";
+        public static final String tmapLayoutConfiguration = "_ZN4tmap14LayoutInternalERN4ogdf17EdgeWeightedGraphIfEEjNS_19LayoutConfigurationERNS_15GraphPropertiesE"; // ist das einzige mit "LayoutConfiguration" das noch übrig ist
     }
 
 
@@ -83,7 +84,14 @@ public class ForeignAPI {
             SymbolLookup tmap = SymbolLookup.libraryLookup(libNames.tmapFileName, offHeap);
 
             // get tmap::LayoutConfiguration
-            // TODO:
+            /*
+            MethodHandle Config = Linker.nativeLinker().downcallHandle(
+                    tmap.find(FunctionNames.tmapLayoutConfiguration).orElseThrow(),
+                    // return, arg1, arg2, ...
+                    FunctionDescriptor.of(ADDRESS));
+
+             */
+            System.out.println("Done!");
 
             // make edges
             // TODO:
@@ -92,12 +100,14 @@ public class ForeignAPI {
             // TODO:
 
             // get handle for layout fun
+
             MethodHandle tmapLayout = Linker.nativeLinker().downcallHandle(
                     tmap.find(FunctionNames.tmapLayoutFromEdgeList).orElseThrow(),
                     // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
                     FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
 
             // call
+            // Config.invoke();
             // TODO:
             tmapLayout.invoke();
 
@@ -112,6 +122,7 @@ public class ForeignAPI {
     public static void main(String[] args) {
         ForeignAPI api = new ForeignAPI();
         api.testForeignGeneral();
+        api.testTMAP();
     }
 
 
