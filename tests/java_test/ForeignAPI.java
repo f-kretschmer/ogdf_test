@@ -71,47 +71,67 @@ public class ForeignAPI {
             // nice automatic casting for primitives...
             Object result = binomial.invoke(10, 2);
             System.out.println(result);
-
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
 
     void testTMAP(){
+        // get std library (not the sexual kind)
+        Linker linker = Linker.nativeLinker();
+        SymbolLookup stdlib = linker.defaultLookup();
+
+        // Allocate onHeap Memory
+        Integer[] input1 = {1, 2, 3, 4, 1};
+        Integer[] input2 = {2, 3, 4, 1, 3};
+        Float[] weights = {0.5F, 1.0F, 0.5F, 1.0F, 1.2F};
+
         try (Arena offHeap = Arena.ofConfined()) {
+
+
 
             // load our native lib
             SymbolLookup tmap = SymbolLookup.libraryLookup(libNames.tmapFileName, offHeap);
-
+            SymbolLookup lib = SymbolLookup.libraryLookup("libLayoutFromEdgeList_internal.so", offHeap);
             // get tmap::LayoutConfiguration
-            /*
-            MethodHandle Config = Linker.nativeLinker().downcallHandle(
-                    tmap.find(FunctionNames.tmapLayoutConfiguration).orElseThrow(),
-                    // return, arg1, arg2, ...
-                    FunctionDescriptor.of(ADDRESS));
-
-             */
-            System.out.println("Done!");
+            // TODO: -> optionaler parameter?
 
             // make edges
-            // TODO:
+            // TODO: copy from Java Arrays (see above)
+            // Allocate off-heap memory to store pointers
+            MemorySegment input1mem = offHeap.allocateArray(JAVA_INT, 1, 2, 3, 4, 1);
+            MemorySegment input2mem = offHeap.allocateArray(JAVA_INT, 2, 3, 4, 1, 3);
+            MemorySegment input3mem = offHeap.allocateArray(JAVA_FLOAT, 0.5F, 1.0F, 0.5F, 1.0F, 1.2F);
+
+
 
             // reserve output vector
             // TODO:
 
             // get handle for layout fun
-
+            /*
             MethodHandle tmapLayout = Linker.nativeLinker().downcallHandle(
                     tmap.find(FunctionNames.tmapLayoutFromEdgeList).orElseThrow(),
                     // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
-                    FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
-
+                    //FunctionDescriptor.of(ADDRESS, JAVA_INT, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
+                    FunctionDescriptor.of(ADDRESS, JAVA_INT, ADDRESS));
+            */
             // call
-            // Config.invoke();
-            // TODO:
-            tmapLayout.invoke();
+            //tmapLayout.invoke();
+
+            MethodHandle libLayout = Linker.nativeLinker().downcallHandle(
+                    lib.find("_Z28LayoutFromEdgeList_internalsiPiS_Pfi").orElseThrow(),
+                    // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
+                    //FunctionDescriptor.of(ADDRESS, JAVA_INT, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
+                    FunctionDescriptor.of(ADDRESS, JAVA_INT, ADDRESS, ADDRESS, ADDRESS, JAVA_INT));
+
+            MemorySegment result = (MemorySegment) libLayout.invoke(5, input1mem, input2mem, input3mem, 6);
+
+            // Extract results from Pointer
+            //TODO
 
 
+            System.out.println(result);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
