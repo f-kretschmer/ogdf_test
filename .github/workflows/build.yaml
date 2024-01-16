@@ -37,7 +37,7 @@ jobs:
       - name: get OGDF + TMAP binaries
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
-            wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
             unzip -j binaries-${{ runner.os }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
@@ -47,7 +47,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         shell: msys2 {0}
         run: |
-            wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
             unzip -j binaries-${{ runner.os }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
