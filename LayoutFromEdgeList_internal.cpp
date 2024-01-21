@@ -9,7 +9,7 @@ float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* de
 
     // Try Find GraphProperties
     auto gp = tmap::GraphProperties();
-    std::cout << gp.mst_weight << std::endl;
+    //std::cout << gp.mst_weight << std::endl;
 
     // Create a vector of tuples
     std::vector<std::tuple<uint32_t, uint32_t, float>> edges;
