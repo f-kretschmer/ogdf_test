@@ -20,6 +20,9 @@ int main() {
 	// }
 
         // std::cout << res << std::endl;
+	std::cout << res[0][0] << std::endl;
+        std::cout << res[0][1] << std::endl;
+        std::cout << res[0][2] << std::endl;
 
 	return 0;
 }
