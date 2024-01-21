@@ -50,7 +50,7 @@ float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* de
     }
 
     // Copy the elements from the vectors into the 2D float array
-    for (size_t i = 0; i < numCols; ++i) {
+    for (size_t i = 0; i < numCols-1; ++i) {
         if (i < vector1.size()) {
             result[i][0] = vector1[i];
         }
