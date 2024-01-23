@@ -38,7 +38,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
             wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
-            unzip -j binaries-${{ runner.os }}.zip -d binaries
+            unzip -o -j binaries-${{ runner.os }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
@@ -48,7 +48,7 @@ jobs:
         shell: msys2 {0}
         run: |
             wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
-            unzip -j binaries-${{ runner.os }}.zip -d binaries
+            unzip -j -o binaries-${{ runner.os }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
