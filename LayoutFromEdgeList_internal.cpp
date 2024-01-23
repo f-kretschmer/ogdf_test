@@ -46,7 +46,7 @@ float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* de
     // Allocate memory for the 2D float array
     float** result = new float*[numRows+1];
     for (size_t i = 0; i < numRows; ++i) {
-        result[i] = new float[numCols+1];
+        result[i] = new float[numCols];
     }
 
     // Copy the elements from the vectors into the 2D float array
