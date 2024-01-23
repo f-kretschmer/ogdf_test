@@ -44,7 +44,7 @@ float ** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* de
     numCols = std::max(numCols, floatVector4.size());
 
     // Allocate memory for the 2D float array
-    float** result = new float*[numRows];
+    float** result = new float*[numRows+1];
     for (size_t i = 0; i < numRows; ++i) {
         result[i] = new float[numCols+1];
     }
