@@ -26,14 +26,5 @@ JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisu
     float* weights = (float*)j_weights;
 
     // call Function
-    float* res = LayoutFromEdgeList_internals(number_of_nodes, sources, destinations, weights, number_of_edges);
-
-    // calculate Array sizes
-    size_t numRows = 2;
-    int numColumns = number_of_nodes;
-
-    // Create the outer jobjectArray
-    jobjectArray outerArray = env->NewObjectArray(2*numRows, env->FindClass("[F"), nullptr);
-
-    return outerArray;
+    return LayoutFromEdgeList_internals(number_of_nodes, sources, destinations, weights, number_of_edges);
   }
