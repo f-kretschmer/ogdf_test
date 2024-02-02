@@ -11,7 +11,7 @@ int main() {
 	size_t length = 5 + 5; // x-Coords + y-coords for nodes (here 0 to 4)
 
 	for (int i = 0; i < length; ++i) {
-        	std::cout << arr[i] << " ";
+        	std::cout << res[i] << " ";
     	}
 	std::cout << std::endl;
 	
