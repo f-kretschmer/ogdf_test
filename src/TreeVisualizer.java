@@ -1,45 +1,36 @@
 package de.unijena.bioinf.TreeVisualization;
+import org.jetbrains.annotations.*;
 
+import java.lang.foreign.*;
+import java.lang.invoke.MethodHandle;
+import java.util.Arrays;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class TreeVisualizer {
-    static {
-        System.loadLibrary("src/LayoutFromEdgeList_internal.cpp"); // TODO: unable to find the File?
-        /*
-        String libName = "layout.cc"; // The name of the file in resources/ dir
-        URL url = TreeVisualizer.class.getResource("/" + libName);
-        File tmpDir;
-        try {
-            tmpDir = Files.createTempDirectory("tempDir").toFile();
-            tmpDir.deleteOnExit();
-            File nativeLibTmpFile = new File(tmpDir, libName);
-            nativeLibTmpFile.deleteOnExit();
-            assert url != null;
-            try (InputStream in = url.openStream()) {
-                Files.copy(in, nativeLibTmpFile.toPath());
-        }
-        System.load(nativeLibTmpFile.getAbsolutePath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+import static java.lang.foreign.ValueLayout.*;
+import static java.lang.foreign.ValueLayout.ADDRESS;
 
-         */
+public class TreeVisualizer {
+    private static class libNames {
+        public static final String odgfFileName = "libOGDF.so";
+        public static final String tmapFileName = "libtmap.so";
+        public static final String functionFileName = "libLayoutFromEdgeList_internal.so";
     }
 
+    private static class FunctionNames {
+        public static final String ogdfBinomial = "_ZN4ogdf4Math8binomialEii";
+        public static final String tmapLayoutFromEdgeList = "_ZN4tmap18LayoutFromEdgeListEjRKSt6vectorISt5tupleIJjjfEESaIS2_EENS_19LayoutConfigurationEbb";
+        public static final String LayoutFromEdgeList = "_Z28LayoutFromEdgeList_internalsiPiS_Pfi";
+    }
     public static void main(String[] args) {
         // Run for testing
         TreeVisualizer testlayout = new TreeVisualizer();
-        EdgeList testedges = new EdgeList(new int[]{1, 2, 3}, new int[]{2, 3, 1}, new float[]{0.5F, 0.2F, 0.3F});
+        EdgeList testedges = new EdgeList(new int[]{1, 2, 3, 4, 1}, new int[]{2, 3, 4, 1, 3}, new float[]{0.5F, 1.0F, 0.5F, 1.0F, 1.2F});
         System.out.println(testlayout.LayoutFromEdgeList(testedges));
     }
 
-    // Implementation at
-    // https://github.com/reymond-group/tmap/blob/32d2d91de3c9a15efde3d6169172d31f0d45642b/src/_tmap/layout.cc#L472
-    private native float[][] LayoutFromEdgeList_internal(int number_of_nodes, int[] sources, int[] destinations,
-            float[] weights, int number_of_edges);
-    // (https://github.com/reymond-group/tmap/blob/32d2d91de3c9a15efde3d6169172d31f0d45642b/src/_tmap/layout.hh#L294)
-    // compile with : javac -h . TreeVisualizer.java
     /**
      *
      * @param edges List of all edges contained in this Graph
@@ -61,25 +52,63 @@ public class TreeVisualizer {
         float[][] mixedReturntype = LayoutFromEdgeList_internal(number_of_nodes, sources, destinations, weights,
                 weights.length);
 
-        float[] xcoordinates = mixedReturntype[0];
-        float[] ycoordinates = mixedReturntype[1];
-        int[] returnedSources = new int[mixedReturntype[2].length];
-        int[] returnedDestinations = new int[mixedReturntype[3].length];
 
-        for (int i = 0; i < mixedReturntype[2].length; i++) {
-            returnedSources[i] = (int) mixedReturntype[2][i];
-        }
-        for (int i = 0; i < mixedReturntype[3].length; i++) {
-            returnedDestinations[i] = (int) mixedReturntype[3][i];
-        }
 
-        // If this fails, something went horribly wrong...
-        assert xcoordinates.length == ycoordinates.length;
-        assert returnedSources.length == returnedDestinations.length;
-
-        return new Layout(xcoordinates, ycoordinates, returnedSources, returnedDestinations);
+        return new Layout(xcoordinates, ycoordinates, sources, destinations);
 
     }
+
+    private void setIntMemoryFromArray(MemorySegment memory, @NotNull Integer[] inputArray) {
+        for(int i=0; i<inputArray.length; i++) {
+            memory.setAtIndex(JAVA_INT, i, inputArray[i]);
+        }
+    }
+
+    private void setFloatMemoryFromArray(MemorySegment memory, @NotNull Float[] inputArray) {
+        for(int i=0; i<inputArray.length; i++) {
+            memory.setAtIndex(JAVA_FLOAT, i, inputArray[i]);
+        }
+    }
+
+    private void layout(){
+        Linker linker = Linker.nativeLinker();
+        SymbolLookup stdlib = linker.defaultLookup();
+
+        // Allocate onHeap Memory
+
+        try (Arena offHeap = Arena.ofConfined()) {
+
+
+            // Allocate off-heap memory to store pointers
+            MemorySegment input1mem = offHeap.allocateArray(JAVA_INT, input1.length);
+            MemorySegment input2mem = offHeap.allocateArray(JAVA_INT, input2.length);
+            MemorySegment input3mem = offHeap.allocateArray(JAVA_FLOAT, weights.length);
+
+            SymbolLookup lib = SymbolLookup.libraryLookup(libNames.functionFileName, offHeap);
+            MethodHandle libLayout = Linker.nativeLinker().downcallHandle(
+                    lib.find(FunctionNames.LayoutFromEdgeList).orElseThrow(),
+                    // returns tuple of vectors and GraphProperties, input: int, edges (address), config(adress), bool, bool
+                    //FunctionDescriptor.of(ADDRESS, JAVA_INT, ADDRESS, JAVA_BOOLEAN, JAVA_BOOLEAN));
+                    FunctionDescriptor.of(ADDRESS, JAVA_INT, ADDRESS, ADDRESS, ADDRESS, JAVA_INT));
+            int array_length = 10; //#Nodes * 2 (x-coord, y-coord)
+            MemorySegment result = (MemorySegment) libLayout.invoke(5, input1mem, input2mem, input3mem, 6);
+            MemorySegment realResult = result.reinterpret(JAVA_FLOAT.byteSize()* (array_length+1));
+
+            float[] results = new float[array_length];
+            for(int i=0; i<array_length; i++) {
+                results[i] = realResult.getAtIndex(JAVA_FLOAT, i);
+            }
+            System.out.println(Arrays.toString(results));
+
+
+
+
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
     static class EdgeList {
         private final int[] sources;
