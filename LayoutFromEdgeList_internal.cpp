@@ -10,13 +10,10 @@ float* flattenVectors(const std::vector<float>& vector1, const std::vector<float
     result_size = vector1.size() + vector2.size();
     float* result = new float[result_size];
     size_t index = 0;
-    std::cout << "Inner Printout" << std::endl;
     for (float value : vector1) {
-        std::cout << value << std::endl;
         result[index++] = value;
     }
     for (float value : vector2) {
-        std::cout << value << std::endl;
         result[index++] = value;
     }
     return result;
