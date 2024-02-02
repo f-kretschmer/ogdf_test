@@ -6,8 +6,8 @@
 #include "LayoutFromEdgeList_internal.hpp"
 
 // Helper function to flatten vectors into a 1D array
-float* flattenVectors(const std::vector<float>& vector1, const std::vector<float>& vector2, const std::vector<uint32_t>& vector3, const std::vector<uint32_t>& vector4, size_t& result_size) {
-    result_size = vector1.size() + vector2.size() + vector3.size() + vector4.size();
+float* flattenVectors(const std::vector<float>& vector1, const std::vector<float>& vector2, size_t& result_size) {
+    result_size = vector1.size() + vector2.size();
     float* result = new float[result_size];
     size_t index = 0;
 
@@ -17,13 +17,6 @@ float* flattenVectors(const std::vector<float>& vector1, const std::vector<float
     for (float value : vector2) {
         result[index++] = value;
     }
-    for (float value : vector3) {
-        result[index++] = static_cast<float>(value);
-    }
-    for (float value : vector4) {
-        result[index++] = static_cast<float>(value);
-    }
-
     return result;
 }
 
@@ -50,12 +43,10 @@ float** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* des
     // Extract the vectors from the tuple
     std::vector<float>& vector1 = std::get<0>(returned);
     std::vector<float>& vector2 = std::get<1>(returned);
-    std::vector<uint32_t>& vector3 = std::get<2>(returned);
-    std::vector<uint32_t>& vector4 = std::get<3>(returned);
 
     // Flatten the vectors into a 1D array
     size_t result_size;
-    float* result = flattenVectors(vector1, vector2, vector3, vector4, result_size);
+    float* result = flattenVectors(vector1, vector2, result_size);
 
     // Now, result is a 1D array containing the flattened vectors
     return reinterpret_cast<float**>(result);
