@@ -12,6 +12,7 @@ float* flattenVectors(const std::vector<float>& vector1, const std::vector<float
     size_t index = 0;
 
     for (float value : vector1) {
+        std::cout << value << std::endl;
         result[index++] = value;
     }
     for (float value : vector2) {
@@ -39,7 +40,7 @@ float* LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* dest
 
     // call function
     std::tuple<std::vector<float>, std::vector<float>, std::vector<uint32_t>, std::vector<uint32_t>, tmap::GraphProperties> returned = tmap::LayoutFromEdgeList(number_of_nodes, edges, config, false, true);
-
+    
     // Extract the vectors from the tuple
     std::vector<float>& vector1 = std::get<0>(returned);
     std::vector<float>& vector2 = std::get<1>(returned);
