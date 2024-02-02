@@ -20,7 +20,7 @@ float* flattenVectors(const std::vector<float>& vector1, const std::vector<float
     return result;
 }
 
-float** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* destinations, float* weights, int number_of_edges) {
+float* LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* destinations, float* weights, int number_of_edges) {
 
     // Try Find GraphProperties
     auto gp = tmap::GraphProperties();
@@ -49,5 +49,5 @@ float** LayoutFromEdgeList_internals(int number_of_nodes, int* sources, int* des
     float* result = flattenVectors(vector1, vector2, result_size);
 
     // Now, result is a 1D array containing the flattened vectors
-    return reinterpret_cast<float**>(result);
+    return result;
 }
