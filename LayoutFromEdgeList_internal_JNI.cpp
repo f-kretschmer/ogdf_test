@@ -30,5 +30,5 @@ JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisu
 
     jobjectArray result = env->NewFloatArray(number_of_nodes*2);
     env->SetFloatArrayRegion(result, 0, number_of_nodes*2, res);
-    return result
+    return result;
   }
