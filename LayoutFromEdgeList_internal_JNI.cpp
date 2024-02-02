@@ -28,7 +28,7 @@ JNIEXPORT jfloatArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisua
     // call Function
     float* res = LayoutFromEdgeList_internals(number_of_nodes, sources, destinations, weights, number_of_edges);
 
-    jobjectArray result = env->NewFloatArray(number_of_nodes*2);
+    jfloatArray result = env->NewFloatArray(number_of_nodes*2);
     env->SetFloatArrayRegion(result, 0, number_of_nodes*2, res);
     return result;
   }
