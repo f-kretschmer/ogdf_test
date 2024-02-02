@@ -1,7 +1,7 @@
 #include "LayoutFromEdgeList_internal.hpp"
 #include <jni.h>
 
-JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisualizer_LayoutFromEdgeList_1internal
+JNIEXPORT jfloatArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisualizer_LayoutFromEdgeList_1internal
   (JNIEnv *env, jobject thisObject, jint j_number_of_nodes, jintArray j_sources, jintArray j_destinations,
   jfloatArray j_weights, jint j_number_of_edges) {
 
