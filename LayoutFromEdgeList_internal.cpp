@@ -16,6 +16,7 @@ float* flattenVectors(const std::vector<float>& vector1, const std::vector<float
         result[index++] = value;
     }
     for (float value : vector2) {
+        std::cout << value << std::endl;
         result[index++] = value;
     }
     return result;
