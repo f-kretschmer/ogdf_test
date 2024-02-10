@@ -8,21 +8,13 @@ int main() {
 
 
 	auto res = LayoutFromEdgeList_internals(5, sources, destinations, weights, 6);
+	size_t length = 5 + 5; // x-Coords + y-coords for nodes (here 0 to 4)
 
-
-	// for (auto& row : res)
-	// {
-	// 	for (auto& column : row)
-	// 	{
-	// 		std::cout << column << " ";
-	// 	}
-        //         std::cout << endl;
-	// }
-
-        // std::cout << res << std::endl;
-	std::cout << res[0][0] << std::endl;
-        std::cout << res[0][1] << std::endl;
-        std::cout << res[0][2] << std::endl;
+	for (int i = 0; i < length; ++i) {
+        	std::cout << res[i] << " ";
+    	}
+	std::cout << std::endl;
+	
 
 	return 0;
 }
