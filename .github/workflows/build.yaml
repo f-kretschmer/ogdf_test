@@ -32,7 +32,7 @@ jobs:
             base-devel
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-openm
+            mingw-w64-x86_64-openmp
             git zip wget unzip
 
       - name: get OGDF + TMAP binaries
