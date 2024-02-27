@@ -12,7 +12,7 @@ extern "C" {
  * Method:    LayoutFromEdgeList_internal
  * Signature: (I[I[I[FI)[[F
  */
-JNIEXPORT jobjectArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisualizer_LayoutFromEdgeList_1internal
+JNIEXPORT jfloatArray JNICALL Java_de_unijena_bioinf_TreeVisualization_TreeVisualizer_LayoutFromEdgeList_1internal
   (JNIEnv *, jobject, jint, jintArray, jintArray, jfloatArray, jint);
 
 #ifdef __cplusplus

@@ -32,13 +32,14 @@ jobs:
             base-devel
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-openmp
             git zip wget unzip
 
       - name: get OGDF + TMAP binaries
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
-            wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
-            unzip -j binaries-${{ runner.os }}.zip -d binaries
+            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            unzip -o -j binaries-${{ runner.os }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
@@ -47,8 +48,8 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         shell: msys2 {0}
         run: |
-            wget https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
-            unzip -j binaries-${{ runner.os }}.zip -d binaries
+            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            unzip -j -o binaries-${{ runner.os }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
@@ -81,7 +82,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "Visual Studio 17 2022" -A x64 -T ClangCL ..
+          cmake -G "Visual Studio 17 2022" -A x64 -T ClangCL -openmp ..
           cmake --build .
 
       - name: test
