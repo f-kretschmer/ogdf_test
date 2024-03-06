@@ -5,9 +5,9 @@ mkdir dependencies
 
 # write dependencies to temp file
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    ldd *.so | grep -v 'not found' > lddout
+    ldd *.so | grep -v 'not found' | grep -v ':' > lddout
 elif [[ "$OSTYPE" == "msys" ]]; then
-    ldd *.dll | grep -v 'not found' > lddout
+    ldd *.dll | grep -v 'not found' | grep -v ':' > lddout
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     chmod +x ../install_utils/mac_ldd.sh
     ../install_utils/mac_ldd.sh *.dylib > lddout
@@ -19,4 +19,4 @@ cat lddout | grep -e 'c++' \
                   -e 'COIN' \
                   -e 'OGDF' \
                   -e 'tmap' \
-    | cut -d' ' -f3 | xargs -r0 cp -t dependencies
+    | cut -d' ' -f3 | xargs -r cp -t dependencies
