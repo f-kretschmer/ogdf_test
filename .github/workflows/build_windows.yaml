@@ -29,8 +29,8 @@ jobs:
             mingw-w64-clang-x86_64-cmake
             mingw-w64-clang-x86_64-openmp
             mingw-w64-clang-x86_64-ninja
-            mingw-w64-clang-x86_64-libc++ # not sure why this is needed... c++ dll must be somewhere else, too (TODO)
-            git zip wget unzip
+            mingw-w64-clang-x86_64-libc++
+            git zip wget unzip            
 
       - name: get OGDF + TMAP binaries
         run: |
