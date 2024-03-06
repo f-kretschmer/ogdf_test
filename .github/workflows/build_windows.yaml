@@ -52,21 +52,25 @@ jobs:
           cmake -G "Ninja" ..
           cmake --build .
 
-      - name: test
-        continue-on-error: true
+      - name: get dependencies
         run: |
           cd build
           ldd *.dll
           # copy all dependencies into this folder
-          cp /clang64/bin/libc++.dll .      # C++ (TODO: find somewhere else)
-          cp ../tmap/out/*dll* .            # TMAP
-          cp ../tmap/ogdf-conda/src/*dll* . # OGDF + COIN
+          chmod +x ../install_utils/ldd_dependencies.sh
+          ../install_utils/ldd_dependencies.sh
+          ls -ltrh dependencies
+
+      - name: test
+        run: |
+          cd build
+          cp dependencies/* .
           ./LayoutFromEdgeList_test.exe
 
       - name: make zip of binaries
         run: |
           zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*dll
-          zip -j tmapogdfwrapper_dependencies-${{ runner.os }}.zip build/libc++.dll
+          zip -j tmapogdfwrapper_with_dependencies-${{ runner.os }}.zip build/*Layout*dll build/dependencies/*
 
       - uses: softprops/action-gh-release@v1
         with:

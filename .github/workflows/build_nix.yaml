@@ -47,6 +47,8 @@ jobs:
           ldd *.dylib ||:
 
       # TODO: for mac https://github.com/boecker-lab/coin-or-clp-java-api/tree/master/mac_utils
+      - name: Debug with tmate on failure
+        uses: mxschmitt/action-tmate@v3
 
       - name: make zip of binaries
         run: |
