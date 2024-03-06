@@ -30,7 +30,7 @@ jobs:
             mingw-w64-clang-x86_64-openmp
             mingw-w64-clang-x86_64-ninja
             mingw-w64-clang-x86_64-libc++
-            git zip wget unzip            
+            git zip wget unzip
 
       - name: get OGDF + TMAP binaries
         run: |
@@ -56,6 +56,7 @@ jobs:
         continue-on-error: true
         run: |
           cd build
+          ldd *.dll
           # copy all dependencies into this folder
           cp /clang64/bin/libc++.dll .      # C++ (TODO: find somewhere else)
           cp ../tmap/out/*dll* .            # TMAP
@@ -64,7 +65,8 @@ jobs:
 
       - name: make zip of binaries
         run: |
-          zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
+          zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*dll
+          zip -j tmapogdfwrapper_dependencies-${{ runner.os }}.zip build/libc++.dll
 
       - uses: softprops/action-gh-release@v1
         with:
