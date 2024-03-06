@@ -84,11 +84,20 @@ jobs:
           cmake --build .
 
       - name: test
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
           cd build
           LD_LIBRARY_PATH=../tmap/ogdf-conda/src ./LayoutFromEdgeList_test
           ldd *.so ||:
           ldd *.dylib ||:
+
+      - name: test (windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          cd build
+          ./LayoutFromEdgeList_test.exe
+
+      # TODO: for mac https://github.com/boecker-lab/coin-or-clp-java-api/tree/master/mac_utils
 
       - name: make zip of binaries
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
