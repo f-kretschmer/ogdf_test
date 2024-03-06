@@ -23,4 +23,4 @@ cat lddout | grep -e 'c++' \
                   -e 'COIN' \
                   -e 'OGDF' \
                   -e 'tmap' \
-    | cut -d' ' -f3 | xargs -r -I{} cp {} dependencies/
+    | cut -d' ' -f3 | xargs -r -I{} cp {} dependencies/ || true
