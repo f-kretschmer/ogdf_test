@@ -1,0 +1,62 @@
+name: build_nix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: f-kretschmer/tmap
+          path: tmap
+
+      - name: get OGDF + TMAP binaries
+        run: |
+            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
+            unzip -o -j binaries-${{ runner.os }}.zip -d binaries
+            mkdir tmap/out
+            mv binaries/*tmap* tmap/out/ # TMAP library
+            mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
+
+      - name: create missing OGDF header file by running cmake
+        run: |
+          cd tmap/ogdf-conda/src
+          cmake -DBUILD_SHARED_LIBS=ON .
+
+      - name: build test
+        run: |
+          mkdir build
+          cd build
+          cmake  ..
+          make
+
+      - name: test
+        run: |
+          cd build
+          LD_LIBRARY_PATH=../tmap/ogdf-conda/src ./LayoutFromEdgeList_test
+          ldd *.so ||:
+          ldd *.dylib ||:
+
+      # TODO: for mac https://github.com/boecker-lab/coin-or-clp-java-api/tree/master/mac_utils
+
+      - name: make zip of binaries
+        run: |
+          zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
+
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: "*.zip"
+          tag_name: "0.1"
+
+      - name: Debug with tmate on failure
+        if: ${{ failure()}}
+        uses: mxschmitt/action-tmate@v3
