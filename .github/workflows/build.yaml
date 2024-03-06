@@ -14,10 +14,6 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: ogdf/ogdf
-      #     path: ogdf
       - uses: actions/checkout@v4
         with:
           repository: f-kretschmer/tmap
@@ -28,11 +24,13 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         with:
           update: true
+          msystem: clang64
           install: >-
             base-devel
-            mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-openmp
+            mingw-w64-clang-x86_64-toolchain
+            mingw-w64-clang-x86_64-cmake
+            mingw-w64-clang-x86_64-openmp
+            mingw-w64-clang-x86_64-ninja
             git zip wget unzip
 
       - name: get OGDF + TMAP binaries
@@ -66,7 +64,7 @@ jobs:
         shell: msys2 {0}
         run: |
           cd tmap/ogdf-conda/src
-          cmake -DBUILD_SHARED_LIBS=ON -G "Visual Studio 17 2022" -A x64 -T ClangCL .
+          cmake -DBUILD_SHARED_LIBS=ON -G "Ninja" .
 
       - name: build test
         if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
@@ -82,7 +80,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -G "Visual Studio 17 2022" -A x64 -T ClangCL -openmp ..
+          cmake -G "Ninja" ..
           cmake --build .
 
       - name: test
