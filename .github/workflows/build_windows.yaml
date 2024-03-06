@@ -29,6 +29,7 @@ jobs:
             mingw-w64-clang-x86_64-cmake
             mingw-w64-clang-x86_64-openmp
             mingw-w64-clang-x86_64-ninja
+            mingw-w64-clang-x86_64-libc++ # not sure why this is needed... c++ dll must be somewhere else, too (TODO)
             git zip wget unzip
 
       - name: get OGDF + TMAP binaries
@@ -55,6 +56,10 @@ jobs:
         continue-on-error: true
         run: |
           cd build
+          # copy all dependencies into this folder
+          cp /clang64/bin/libc++.dll .      # C++ (TODO: find somewhere else)
+          cp ../tmap/out/*dll* .            # TMAP
+          cp ../tmap/ogdf-conda/src/*dll* . # OGDF + COIN
           ./LayoutFromEdgeList_test.exe
 
       - name: make zip of binaries
