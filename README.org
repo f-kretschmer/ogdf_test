@@ -8,7 +8,7 @@ TMAP (+OGDF) are compiled from a [[https://github.com/f-kretschmer/tmap][tmap-fo
 
 * Building
 
-Everything happens in [[https://github.com/f-kretschmer/ogdf_test/blob/master/.github/workflows/build.yaml][the "build" GitHub workflow]]:
+Everything happens in the "build" workflows:
 - cloning the tmap-fork-repo
 - downloading compiled binaries from the tmap-fork-releases
 - =cmake= has to be run again for OGDF because one of the needed header files is auto-generated
