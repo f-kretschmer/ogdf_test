@@ -53,6 +53,7 @@ jobs:
 
       - name: make zip of binaries
         run: |
+          rm build/*test*
           zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
           zip -j tmapogdfwrapper_with_dependencies-${{ runner.os }}.zip build/*Layout* build/dependencies/*
 
