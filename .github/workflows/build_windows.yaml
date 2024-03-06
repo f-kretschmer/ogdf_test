@@ -76,8 +76,10 @@ jobs:
 
       - uses: softprops/action-gh-release@v1
         with:
-          files: "*.zip"
-          tag_name: "0.1"
+          files: |
+            tmapogdfwrapper-${{ runner.os }}.zip
+            tmapogdfwrapper_with_dependencies-${{ runner.os }}.zip
+          tag_name: "0.2"
 
       - name: Debug with tmate on failure
         if: ${{ failure()}}
