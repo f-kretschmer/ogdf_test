@@ -8,6 +8,9 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: write
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -29,7 +32,6 @@ jobs:
             git zip wget unzip
 
       - name: get OGDF + TMAP binaries
-        shell: msys2 {0}
         run: |
             wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
             unzip -j -o binaries-${{ runner.os }}.zip -d binaries
@@ -38,13 +40,11 @@ jobs:
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
 
       - name: create missing OGDF header file by running cmake
-        shell: msys2 {0}
         run: |
           cd tmap/ogdf-conda/src
           cmake -DBUILD_SHARED_LIBS=ON -G "Ninja" .
 
       - name: build test
-        shell: msys2 {0}
         run: |
           mkdir build
           cd build
@@ -58,7 +58,6 @@ jobs:
           ./LayoutFromEdgeList_test.exe
 
       - name: make zip of binaries
-        shell: msys2 {0}
         run: |
           zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
 
