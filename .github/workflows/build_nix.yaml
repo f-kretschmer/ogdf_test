@@ -43,16 +43,20 @@ jobs:
         run: |
           cd build
           LD_LIBRARY_PATH=../tmap/ogdf-conda/src ./LayoutFromEdgeList_test
+
+      - name: get dependencies
+        run: |
+          cd build
           ldd *.so ||:
           ldd *.dylib ||:
-
-      # TODO: for mac https://github.com/boecker-lab/coin-or-clp-java-api/tree/master/mac_utils
-      - name: Debug with tmate on failure
-        uses: mxschmitt/action-tmate@v3
+          chmod +x ../install_utils/ldd_dependencies.sh
+          ../install_utils/ldd_dependencies.sh
+          ls -ltrh dependencies
 
       - name: make zip of binaries
         run: |
           zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
+          zip -j tmapogdfwrapper_with_dependencies-${{ runner.os }}.zip build/*Layout* build/dependencies/*
 
       - uses: softprops/action-gh-release@v1
         with:
