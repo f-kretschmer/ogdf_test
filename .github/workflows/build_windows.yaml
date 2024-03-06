@@ -57,6 +57,8 @@ jobs:
           cd build
           ldd *.dll
           # copy all dependencies into this folder
+          cp ../tmap/out/*dll* .            # TMAP
+          cp ../tmap/ogdf-conda/src/*dll* . # OGDF + COIN
           chmod +x ../install_utils/ldd_dependencies.sh
           ../install_utils/ldd_dependencies.sh
           ls -ltrh dependencies
@@ -64,7 +66,7 @@ jobs:
       - name: test
         run: |
           cd build
-          cp dependencies/* .
+          # cp dependencies/* .
           ./LayoutFromEdgeList_test.exe
 
       - name: make zip of binaries

@@ -47,8 +47,6 @@ jobs:
       - name: get dependencies
         run: |
           cd build
-          ldd *.so ||:
-          ldd *.dylib ||:
           chmod +x ../install_utils/ldd_dependencies.sh
           ../install_utils/ldd_dependencies.sh
           ls -ltrh dependencies
