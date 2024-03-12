@@ -28,8 +28,8 @@ jobs:
             mv binaries/*tmap* tmap/out/ # TMAP library
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
 
-      - name: install openMP for mac M1
-        if: ${{ matrix.os == 'macos-14' }}
+      - name: install openMP for mac
+        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'macos-14' }}
         run: brew install libomp
 
       - name: create missing OGDF header file by running cmake
@@ -44,10 +44,17 @@ jobs:
           cmake  ..
           make
 
-      - name: test
+      - name: test linux
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           cd build
           LD_LIBRARY_PATH=../tmap/ogdf-conda/src ./LayoutFromEdgeList_test
+
+      - name: test mac
+        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'macos-14' }}
+        run: |
+          cd build
+          ./LayoutFromEdgeList_test
 
       - name: get dependencies
         run: |
