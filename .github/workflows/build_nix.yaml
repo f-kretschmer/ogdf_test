@@ -21,8 +21,8 @@ jobs:
 
       - name: get OGDF + TMAP binaries
         run: |
-            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}.zip
-            unzip -o -j binaries-${{ runner.os }}.zip -d binaries
+            wget -c https://github.com/f-kretschmer/tmap/releases/download/0.1/binaries-${{ runner.os }}-${{ runner.arch }}.zip
+            unzip -o -j binaries-${{ runner.os }}-${{ runner.arch }}.zip -d binaries
             mkdir tmap/out
             mv binaries/*tmap* tmap/out/ # TMAP library
             mv binaries/* tmap/ogdf-conda/src/ # OGDF+COIN libraries
@@ -54,14 +54,14 @@ jobs:
       - name: make zip of binaries
         run: |
           rm build/*test*
-          zip -j tmapogdfwrapper-${{ runner.os }}.zip build/*Layout*
-          zip -j tmapogdfwrapper_with_dependencies-${{ runner.os }}.zip build/*Layout* build/dependencies/*
+          zip -j tmapogdfwrapper-${{ runner.os }}-${{ runner.arch }}.zip build/*Layout*
+          zip -j tmapogdfwrapper_with_dependencies-${{ runner.os }}-${{ runner.arch }}.zip build/*Layout* build/dependencies/*
 
       - uses: softprops/action-gh-release@v1
         with:
           files: |
-            tmapogdfwrapper-${{ runner.os }}.zip
-            tmapogdfwrapper_with_dependencies-${{ runner.os }}.zip
+            tmapogdfwrapper-${{ runner.os }}-${{ runner.arch }}.zip
+            tmapogdfwrapper_with_dependencies-${{ runner.os }}-${{ runner.arch }}.zip
           tag_name: "0.2"
 
       - name: Debug with tmate on failure
