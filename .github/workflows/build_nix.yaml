@@ -8,7 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-14]
+        # os: [ubuntu-latest, macos-latest, macos-14]
+        os: [macos-14]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
