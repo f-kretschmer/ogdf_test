@@ -8,8 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # os: [ubuntu-latest, macos-latest, macos-14]
-        os: [macos-14]
+        os: [ubuntu-latest, macos-latest, macos-14]
+        # NOTE: macos-latest=x86, macos-14=ARM
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -55,6 +55,9 @@ jobs:
           chmod +x ../install_utils/ldd_dependencies.sh
           ../install_utils/ldd_dependencies.sh
           ls -ltrh dependencies
+
+# TODO: mac @rpath also for system dependencies like libc++, libomp etc.
+# TODO: then we can also add libc++ (and libc++abi) to the zips, which is currently not found
 
       - name: make zip of binaries
         run: |
