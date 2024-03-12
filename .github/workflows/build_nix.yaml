@@ -58,6 +58,7 @@ jobs:
 
 # TODO: mac @rpath also for system dependencies like libc++, libomp etc.
 # TODO: then we can also add libc++ (and libc++abi) to the zips, which is currently not found
+# -> https://github.com/boecker-lab/coin-or-clp-java-api/blob/master/mac_utils/make_rpaths
 
       - name: make zip of binaries
         run: |
