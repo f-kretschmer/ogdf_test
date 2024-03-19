@@ -5,9 +5,9 @@ mkdir dependencies
 
 # write dependencies to temp file
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    LD_LIBRARY_PATH=../tmap/ogdf-conda/src ldd *.so | grep -v 'not found' | grep -v ':' > lddout
+    LD_LIBRARY_PATH=../tmap/ogdf-conda/src ldd *.so | grep -v 'LayoutFromEdgeList' | grep -v 'not found' | grep -v ':' > lddout
 elif [[ "$OSTYPE" == "msys" ]]; then
-    ldd *.dll | grep -v 'not found' | grep -v ':' > lddout
+    ldd *.dll | grep -v 'LayoutFromEdgeList' | grep -v 'not found' | grep -v ':' > lddout
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export DYLD_PRINT_LIBRARIES=1
     export DYLD_PRINT_LIBRARIES_POST_LAUNCH=1
