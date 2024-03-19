@@ -21,6 +21,7 @@ cat lddout
 cat lddout | grep -e 'c++' \
                   -e 'gcc_s' \
                   -e 'libomp' \
+                  -e 'libgomp' \
                   -e 'COIN' \
                   -e 'OGDF' \
                   -e 'tmap' \
