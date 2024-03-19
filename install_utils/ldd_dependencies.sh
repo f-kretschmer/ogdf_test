@@ -5,7 +5,7 @@ mkdir dependencies
 
 # write dependencies to temp file
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    ldd *.so | grep -v 'not found' | grep -v ':' > lddout
+    LD_LIBRARY_PATH=../tmap/ogdf-conda/src ldd *.so | grep -v 'not found' | grep -v ':' > lddout
 elif [[ "$OSTYPE" == "msys" ]]; then
     ldd *.dll | grep -v 'not found' | grep -v ':' > lddout
 elif [[ "$OSTYPE" == "darwin"* ]]; then
